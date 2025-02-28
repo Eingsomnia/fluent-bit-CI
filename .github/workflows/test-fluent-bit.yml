@@ -13,11 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up directories and copy files
+      - name: Set up directories
         run: |
           mkdir -p csv conf output
-          cp csv/*.csv csv/
-          cp conf/* conf/
 
       - name: Run Fluent Bit
         run: |
