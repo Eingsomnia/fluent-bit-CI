@@ -15,21 +15,21 @@ jobs:
 
       - name: Set up directories and copy files
         run: |
-          mkdir -p /csv /conf /output
-          cp csv/*.csv /csv/
-          cp conf/* /conf/
+          mkdir -p csv conf output
+          cp csv/*.csv csv/
+          cp conf/* conf/
 
       - name: Run Fluent Bit
         run: |
-          docker run --rm -v /csv:/csv -v /conf:/conf -v /output:/output fluent/fluent-bit:latest /fluent-bit/bin/fluent-bit -c /conf/fluent-bit.conf
+          docker run --rm -v $(pwd)/csv:/csv -v $(pwd)/conf:/conf -v $(pwd)/output:/output fluent/fluent-bit:latest /fluent-bit/bin/fluent-bit -c /conf/fluent-bit.conf
 
       - name: Display output
         run: |
-          cat /output/output.json
+          cat output/output.json
 
       - name: Upload output as artifact
         uses: actions/upload-artifact@v4
         with:
           name: fluent-bit-output
-          path: /output/
+          path: output/
           retention-days: 7
