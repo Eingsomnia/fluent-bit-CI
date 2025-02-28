@@ -19,7 +19,7 @@ jobs:
 
       - name: Run Fluent Bit
         run: |
-          docker run --rm -v $(pwd)/csv:/csv -v $(pwd)/conf:/conf -v $(pwd)/output:/output fluent/fluent-bit:latest /fluent-bit/bin/fluent-bit -c /conf/fluent-bit.conf --once
+          docker run --rm -v $(pwd)/csv:/csv -v $(pwd)/conf:/conf -v $(pwd)/output:/output fluent/fluent-bit:latest sh -c "/fluent-bit/bin/fluent-bit -c /conf/fluent-bit.conf & sleep 5 && pkill fluent-bit"
 
       - name: Display output
         run: |
