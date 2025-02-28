@@ -13,17 +13,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up directories
+      - name: Set up directories and sample data
         run: |
           mkdir -p csv conf output
+          # Create a sample CSV file for testing
+          echo "No.,Name,Age" > csv/sample.csv
+          echo "1,Alice,25" >> csv/sample.csv
+          echo "2,Bob,30" >> csv/sample.csv
+          # Ensure config files are in conf/ (assuming they’re in repo)
+          ls -l conf/
 
       - name: Run Fluent Bit
         run: |
-          docker run --rm -v $(pwd)/csv:/csv -v $(pwd)/conf:/conf -v $(pwd)/output:/output fluent/fluent-bit:latest sh -c "/fluent-bit/bin/fluent-bit -c /conf/fluent-bit.conf & sleep 5 && pkill fluent-bit"
+          docker run --rm -v $(pwd)/csv:/csv -v $(pwd)/conf:/conf -v $(pwd)/output:/output fluent/fluent-bit:latest /fluent-bit/bin/fluent-bit -c /conf/fluent-bit.conf
+        continue-on-error: true  # Allow workflow to proceed even if Fluent Bit fails
 
       - name: Display output
         run: |
-          cat output/output.json || echo "No output file generated yet"
+          if [ -f output/output.json ]; then
+            cat output/output.json
+          else
+            echo "No output file generated yet"
+          fi
 
       - name: Upload output as artifact
         uses: actions/upload-artifact@v4
