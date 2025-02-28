@@ -31,5 +31,7 @@ function csv_parse(tag, timestamp, record)
         index = index + 1
     end
 
+    -- Debug: Confirm processing
+    print("Processed row with No_: " .. (fields["No_"] or "N/A"))
     return 1, timestamp, fields
 end
