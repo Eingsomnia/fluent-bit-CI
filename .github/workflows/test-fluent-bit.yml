@@ -23,7 +23,7 @@ jobs:
 
       - name: Display output
         run: |
-          cat output/output.json
+          cat output/output.json || echo "No output file generated yet"
 
       - name: Upload output as artifact
         uses: actions/upload-artifact@v4
